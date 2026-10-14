@@ -1,0 +1,1 @@
+if(check <len(word)-1):
