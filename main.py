@@ -27,7 +27,8 @@ def to_store_words():
 def to_know_learned_words():
     with open("daily_words.json","r")as file:
         previous_words=json.load(file)
-        print(previous_words)
+        data.update(previous_words)
+        print(data)
         
     
   #for end of day       
@@ -36,7 +37,7 @@ def end_ofday():
     return bye
      
 # main part of code
-
+to_know_learned_words()
 for check in range (5):
     user_sentence=word_s(word)
     user_sentence=check_wordIn_sentence(word[check],user_sentence)  
