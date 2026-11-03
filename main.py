@@ -1,17 +1,20 @@
 import json
 import requests
 api_key="https://random-word-api.herokuapp.com/word?number=5"
-response =requests.get(api_key)
-word =response.json()
+
 # word =["keep","humble","curiosity","optimal","efficient"]
 check=0
-
+new_words = []
 def check_previousword():
-    new_words = []
+   while len(new_words)<5:
+    response =requests.get(api_key)
+    word =response.json()
     for w in word:
         if w not in data and w not in new_words : # te word should not in data and shoulc not in new_words
             new_words.append(w)
-    return new_words
+            if len(new_words)==5:
+                break
+   return new_words
    
 #to get the word 
 def word_s(new_words):
@@ -42,9 +45,15 @@ def to_know_learned_words():
     with open("daily_words.json","r")as file:
         previous_words=json.load(file)
         data.update(previous_words)
-        print(data)
         
-    
+        print("the word which we learned are :\n ")
+        for i,(word,sentence) in enumerate(data.items(), start=1):
+            print(f"{i}.{word}")
+            print(f" Sentence :{sentence}") 
+        
+# data.items() gives you both the word (key) and sentence (value).
+# enumerate() adds numbering.
+
   #for end of day       
 def end_ofday():
     bye= "\nThat is it for todays bye!! come tomorrow to do more 5 words"
