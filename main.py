@@ -15,10 +15,24 @@ def check_previousword():
             if len(new_words)==5:
                 break
    return new_words
-   
+
+
+def toget_meaning(word):
+    url = f"https://api.dictionaryapi.dev/api/v2/entries/en/{word}"
+    response1 = requests.get(url)
+    meaning_data = response1.json()
+    print(meaning_data)
+    if 'title' in meaning_data:
+        print(" the meaning was not found")
+        return
+        
+    print(meaning_data[0]["meanings"][0]["definitions"][0]["definition"])
+  
+
 #to get the word 
 def word_s(new_words):
     print(f"Todays word is'{new_words[check]}' !!!")
+    toget_meaning(new_words[check])
     sentence=input(f"Enter the sentence that have the '{new_words[check]}':")
     return sentence
 
