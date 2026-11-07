@@ -1,5 +1,10 @@
 import json
 import requests
+import os
+from dotenv import load_dotenv
+from openai import OpenAI
+
+load_dotenv()
 api_key="https://random-word-api.herokuapp.com/word?number=5"
 
 # word =["keep","humble","curiosity","optimal","efficient"]
@@ -18,21 +23,27 @@ def check_previousword():
 
 
 def toget_meaning(word):
-    url = f"https://api.dictionaryapi.dev/api/v2/entries/en/{word}"
-    response1 = requests.get(url)
-    meaning_data = response1.json()
-    print(meaning_data)
-    if 'title' in meaning_data:
-        print(" the meaning was not found")
-        return
+    openai_api_key = os.getenv("OPENAI_KEY")
+    message=[{"role":"system","content":"you are an english vocabulary teacher that provide"
+    "meaning ,part of speech and example"},
+    {"role":"user","content":f"give meaing on this {word}"}]
+    openai=OpenAI(api_key=openai_api_key)
+    response1=openai.chat.completions.create(model="gpt-4o-mini",messages=message)
+    return response1.choices[0].message.content
+    # response1 = requests.get(url)
+    # meaning_data = response1.json()
+    # print(meaning_data)
+    # if 'title' in meaning_data:
+    #     print(" the meaning was not found")
+    #     return
         
-    print(meaning_data[0]["meanings"][0]["definitions"][0]["definition"])
+    # print(meaning_data[0]["meanings"][0]["definitions"][0]["definition"])
   
 
 #to get the word 
 def word_s(new_words):
     print(f"Todays word is'{new_words[check]}' !!!")
-    toget_meaning(new_words[check])
+    print(toget_meaning(new_words[check]))
     sentence=input(f"Enter the sentence that have the '{new_words[check]}':")
     return sentence
 
@@ -86,7 +97,8 @@ print(new_words)
 for check in range (5):
     user_sentence=word_s(new_words)
     user_sentence=check_wordIn_sentence(new_words[check],user_sentence)  
-    to_store_words()   
+    to_store_words() 
+   
     
 
 print(end_ofday())   

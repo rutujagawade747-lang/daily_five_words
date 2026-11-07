@@ -14,11 +14,16 @@ import requests
 # print(response.status_code) 
 # print(word)
 # print(type(word))
+import os
+from dotenv import load_dotenv
+from openai import OpenAI
 
-url = "https://api.dictionaryapi.dev/api/v2/entries/en/curiosity"
+load_dotenv()
 
-response = requests.get(url)
-meaning_data = response.json()
+# url = "https://api.dictionaryapi.dev/api/v2/entries/en/curiosity"
+
+# response = requests.get(url)
+# meaning_data = response.json()
 
 # print(meaning_data)
 # print("================")
@@ -26,4 +31,16 @@ meaning_data = response.json()
 # print("================")
 # print(meaning_data[0]["meanings"])
 # print(meaning_data[0]["meanings"][0].keys())
-print(meaning_data[0]["meanings"][0]["definitions"][0]["definition"])
+# print(meaning_data[0]["meanings"][0]["definitions"][0]["definition"])
+
+def toget_meaning(word):
+    openai_api_key = os.getenv("OPENAI_KEY")
+    message=[{"role":"system","content":"you are an english vocabulary teacher that provide"
+    "meaning ,part of speech and example"},
+    {"role":"user","content":f"give meaing on this {word}"}]
+    openai=OpenAI(api_key=openai_api_key)
+    response1=openai.chat.completions.create(model="gpt-4o-mini",messages=message)
+    return response1.choices[0].message.content
+name ="curiosity"
+name1=toget_meaning(name)
+print(name1)
